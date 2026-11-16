@@ -1,26 +1,53 @@
 # swkotor-backend
 
-Status: scaffold. No code yet.
+The optional server side, as a Cloudflare Worker. The launcher works without it. This is a
+reference implementation of the backend API in
+[`kotor-runtime-api`](https://github.com/kolto-labs/kotor-runtime-api) (`openapi/backend.yaml`);
+anything that implements that OpenAPI document can replace it.
 
-The optional server side. The launcher works without it; this repo is a reference implementation on
-Cloudflare Workers, and anything that implements the same API can stand in for it.
+## Endpoints
 
-## Responsibility
+- `GET /config`: launcher configuration (`{ "siteDomain": ... }`).
+- `GET /community/videos/latest?limit=1..50`: latest videos from a YouTube channel's public feed,
+  cached for ten minutes.
+- `GET /runtime/{version}/manifest` and `GET /runtime/{version}/files/{name}`: published runtime
+  release files from R2, with ETag, `If-None-Match` and single byte ranges (206 and 416).
 
-- `GET /config`: launcher configuration.
-- `GET /community/videos/latest`: community feed.
-- `GET /runtime/{version}/manifest` and `/runtime/{version}/files/{name}`: deliver published
-  `kotor-wasm` release files, including chunked streaming of large archives.
+Only files the release manifest lists are served. Versions must be semver and names a single path
+segment, so nothing else in the bucket can be reached.
+
+## Configure
+
+Set these in `wrangler.jsonc`, a wrangler environment, or the dashboard:
+
+| Name | What |
+| --- | --- |
+| `SITE_DOMAIN` | Host name the launcher is served from, e.g. `launcher.example`. Empty: `/config` answers 404. |
+| `ALLOWED_ORIGINS` | Comma-separated origins allowed to call the API from a browser. |
+| `YOUTUBE_CHANNEL_ID` | Channel for the video feed. Empty: the endpoint answers 404. |
+| `RUNTIME_BUCKET` | R2 binding holding published runtime releases. |
+
+Bucket layout, one prefix per release:
+
+```text
+<version>/runtime-manifest.json
+<version>/<name>          # every file the manifest lists
+```
+
+## Develop
+
+```sh
+npm install        # npm 11; npm 10 fails on this dependency set
+npx tsc --noEmit
+npx vitest run     # runs in the Workers runtime; no network
+npx wrangler dev
+npx wrangler deploy
+```
 
 ## Not here
 
 Launcher pages, the runtime build, anything that needs the user's game files. Game files are never
 uploaded to or served from a backend.
-
-## Contract
-
-The OpenAPI document in `kotor-runtime-api`. Secrets and the site domain come from deployment
-configuration, never from source.
 
 ## Where this fits
 
@@ -29,3 +56,5 @@ the roadmap are in [ARCHITECTURE.md](https://github.com/kolto-labs/swkotor-web/b
 
 No game files are distributed. Bring your own copy of KotOR I or II.
 Not affiliated with Lucasfilm, Disney, BioWare, Obsidian or Aspyr.
+
+MIT licence.
