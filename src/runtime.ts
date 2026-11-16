@@ -62,8 +62,9 @@ export function parseRange(header: string | null, size: number): ByteRange | "un
   }
   const start = Number(m[1]);
   const end = m[2] === "" ? size - 1 : Number(m[2]);
-  if (end < start) return null;
+  // Checked before end < start: for "bytes=<size>-" the defaulted end is size - 1, below start.
   if (start >= size) return "unsatisfiable";
+  if (end < start) return null;
   return { offset: start, length: Math.min(end, size - 1) - start + 1 };
 }
 
