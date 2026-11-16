@@ -13,6 +13,7 @@
   "devDependencies": {
     "@cloudflare/vitest-plugin": "1.8.2",
     "@cloudflare/workers-types": "^5.20261113.1",
+    "@kolto-labs/kotor-runtime-api": "github:kolto-labs/kotor-runtime-api#claude/project-thread-d70zq6",
     "typescript": "~5.9.3",
     "vitest": "4.1.12",
     "wrangler": "4.162.0"

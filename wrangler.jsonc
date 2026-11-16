@@ -1,0 +1,20 @@
+// Placeholder values: set your own in this file, a wrangler environment, or the dashboard.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "swkotor-backend",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-13",
+  "observability": { "enabled": true },
+  "vars": {
+    // Host name the launcher is served from (GET /config). Leave empty to answer 404.
+    "SITE_DOMAIN": "launcher.example",
+    // Comma-separated origins allowed to call the API from a browser.
+    "ALLOWED_ORIGINS": "https://launcher.example",
+    // YouTube channel for GET /community/videos/latest. Leave empty to answer 404.
+    "YOUTUBE_CHANNEL_ID": ""
+  },
+  "r2_buckets": [
+    // Published runtime releases: <version>/runtime-manifest.json and <version>/<name>.
+    { "binding": "RUNTIME_BUCKET", "bucket_name": "kotor-runtime" }
+  ]
+}
