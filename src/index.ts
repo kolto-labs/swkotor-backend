@@ -1,14 +1,10 @@
+import type { LauncherConfig } from "@kolto-labs/kotor-runtime-api";
 import { preflight, withCors } from "./cors";
 import { error, json, Status, type Env } from "./http";
 import { getFile, getManifest } from "./runtime";
 import { latestVideos } from "./videos";
 
 export type { Env } from "./http";
-
-/** The OpenAPI `LauncherConfig` schema. */
-export interface LauncherConfig {
-  siteDomain: string;
-}
 
 function getConfig(env: Env): Response {
   const siteDomain = env.SITE_DOMAIN?.trim();

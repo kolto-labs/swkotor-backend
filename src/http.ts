@@ -1,3 +1,5 @@
+import type { ApiError } from "@kolto-labs/kotor-runtime-api";
+
 /** Bindings and vars this Worker reads. All deployment-specific values come from here. */
 export interface Env {
   /** Host name the launcher is served from, returned by `GET /config`. */
@@ -23,11 +25,6 @@ export const Status = {
   RangeNotSatisfiable: 416,
   BadGateway: 502,
 } as const;
-
-/** The OpenAPI `Error` schema. */
-export interface ApiError {
-  error: string;
-}
 
 export function json(body: unknown, status: number = Status.OK, headers: HeadersInit = {}): Response {
   const h = new Headers(headers);

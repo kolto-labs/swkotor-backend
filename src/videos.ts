@@ -1,17 +1,5 @@
+import type { Video, VideoList } from "@kolto-labs/kotor-runtime-api";
 import { error, json, Status, type Env } from "./http";
-
-/** The OpenAPI `Video` schema. */
-export interface Video {
-  title: string;
-  url: string;
-  publishedAt: string;
-  thumbnailUrl?: string;
-}
-
-/** The OpenAPI `VideoList` schema. */
-export interface VideoList {
-  videos: Video[];
-}
 
 const FEED_URL = "https://www.youtube.com/feeds/videos.xml?channel_id=";
 /** Seconds the upstream feed and our response may be cached. */
